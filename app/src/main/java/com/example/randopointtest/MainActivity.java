@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             double latitude = gpsTracker.getLatitude();
             double longitude = gpsTracker.getLongitude();
 
-            String LATLONG = String.valueOf(latitude) + "\n" + String.valueOf(longitude);
+            String LATLONG = String.valueOf(latitude) + ", " + String.valueOf(longitude);
 
             coordinates.setText(LATLONG);
         } else {
