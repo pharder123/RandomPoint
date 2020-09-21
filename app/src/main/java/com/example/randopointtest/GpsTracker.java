@@ -1,8 +1,10 @@
 package com.example.randopointtest;
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -10,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -108,6 +111,50 @@ public class GpsTracker extends Service implements LocationListener {
         }
 
         return location;
+    }
+
+    public void stopUsingGPS() {
+        if (locationManager != null) {
+            locationManager.removeUpdates(GpsTracker.this);
+        }
+    }
+
+    public double getLatitude(){
+        if(location != null){
+            latitude = location.getLatitude();
+        }
+        return latitude;
+    }
+
+    public double getLongitude(){
+        if(location != null){
+            longitude = location.getLongitude();
+        }
+        return longitude;
+    }
+
+    public boolean canGetLocation() {
+        return this.canGetLocation;
+    }
+
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        alertDialog.setTitle("GPS settings");
+        alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                mContext.startActivity(intent);
+            }
+        });
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertDialog.show();
     }
 
     @Nullable

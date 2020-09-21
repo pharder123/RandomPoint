@@ -46,13 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void getLocation(View view){
         gpsTracker = new GpsTracker(MainActivity.this);
-        if(gpsTracker.canGetLocation()){
+        if (gpsTracker.canGetLocation()) {
             double latitude = gpsTracker.getLatitude();
             double longitude = gpsTracker.getLongitude();
 
-//            tvLatitude.setText(String.valueOf(latitude));
-//            tvLongitude.setText(String.valueOf(longitude));
-        }else{
+            String LATLONG = String.valueOf(latitude) + "\n" + String.valueOf(longitude);
+
+            coordinates.setText(LATLONG);
+        } else {
             gpsTracker.showSettingsAlert();
         }
     }
