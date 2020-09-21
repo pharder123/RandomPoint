@@ -44,7 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getLocation(View view){
+    public void getRandomLocation() {
+
+    }
+
+    public void getLocation(View view) {
         gpsTracker = new GpsTracker(MainActivity.this);
         if (gpsTracker.canGetLocation()) {
             double latitude = gpsTracker.getLatitude();

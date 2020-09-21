@@ -43,7 +43,6 @@ public class GpsTracker extends Service implements LocationListener {
 
 
     public Location getLocation() {
-
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
@@ -102,8 +101,7 @@ public class GpsTracker extends Service implements LocationListener {
                         longitude = location.getLongitude();
                     }
                 }
-            }
-            else {
+            } else {
                 this.canGetLocation = false;
             }
         } catch(Exception e){
@@ -165,7 +163,6 @@ public class GpsTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
     }
 
     @Override
