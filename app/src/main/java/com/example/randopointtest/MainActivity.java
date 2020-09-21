@@ -24,55 +24,36 @@ import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GoogleMap mMap;
-    static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 917;
-    static Executor ex = ContextCompat.getMainExecutor();
-    private boolean permissionsGranted;
+    private GpsTracker gpsTracker;
+    private TextView coordinates;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkPermission();
-    }
+        coordinates = findViewById(R.id.txtMessage);
 
-    public void getLatLong(View view) {
-
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        // I suppressed the missing-permission warning because this wouldn't be executed in my
-        // case without location services being enabled
-        @SuppressLint("MissingPermission") android.location.Location currentLocation =
-                locationManager.getCurrentLocation(locationManager.getAllProviders().get(0), null, ContextCompat.getMainExecutor(this), );
-        double userLat = currentLocation.getLatitude();
-        double userLong = currentLocation.getLongitude();
-
-        TextView textView = findViewById(R.id.txtMessage);
-        textView.setText("current Latitude: " + userLat + "/n" + "current Longitude: " + userLong);
-    }
-
-    private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantresults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
-                if (grantresults.length > 0 && grantresults[0] == PackageManager.PERMISSION_GRANTED) {
-                    permissionsGranted = true;
-                } else {
-                    permissionsGranted = false;
-                }
-                return;
+        try {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
             }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void getLocation(View view){
+        gpsTracker = new GpsTracker(MainActivity.this);
+        if(gpsTracker.canGetLocation()){
+            double latitude = gpsTracker.getLatitude();
+            double longitude = gpsTracker.getLongitude();
+
+//            tvLatitude.setText(String.valueOf(latitude));
+//            tvLongitude.setText(String.valueOf(longitude));
+        }else{
+            gpsTracker.showSettingsAlert();
         }
     }
 
