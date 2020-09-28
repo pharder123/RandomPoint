@@ -3,29 +3,19 @@ package com.example.randopointtest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.concurrent.Executor;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     private GpsTracker gpsTracker;
     private TextView coordinates;
+    private TextView randomNumber;
+    private Random rand;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         coordinates = findViewById(R.id.txtMessage);
+        randomNumber = findViewById(R.id.txtMessage2);
+
+        rand = new Random();
 
         try {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
@@ -41,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
-    public void getRandomLocation() {
-
+    public void getRandomNumber(View view) {
+        int rand_int1 = rand.nextInt(1000);
+        int rand_int2 = rand.nextInt(1000);
+        String output = rand_int1 + ", " + rand_int2;
+        randomNumber.setText(output);
     }
 
     public void getLocation(View view) {
@@ -54,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
             double latitude = gpsTracker.getLatitude();
             double longitude = gpsTracker.getLongitude();
 
-            String LATLONG = String.valueOf(latitude) + ", " + String.valueOf(longitude);
+            String LATLONG = latitude + ", " + longitude;
 
             coordinates.setText(LATLONG);
         } else {
